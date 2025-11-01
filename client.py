@@ -106,7 +106,7 @@ def main():
         res = requests.post(url, json=payload)
         print("Registration:", res.text)
     else:  # authenticate
-        auth_sig = sign_data(private_key, mac.encode("utf-8"))
+        auth_sig = sign_data(private_key, mac)
         with open(CLIENT_PUBLIC, "r", encoding="utf-8") as f:
             pub_pem = f.read()
         payload = {
@@ -127,7 +127,7 @@ def main():
                 install_sh = os.path.join(tmpdir, "install.sh")
                 if os.path.exists(install_sh):
                     os.chmod(install_sh, 0o755)
-                    subprocess.run([install_sh], check=True)
+                    subprocess.run([install_sh], check=True, cwd=tmpdir)
                 else:
                     print("install.sh not found in the zip file.")
         else:
