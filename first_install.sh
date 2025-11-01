@@ -24,3 +24,8 @@ chmod +x /var/lib/sirius-installer/authenticate.sh
 # Copy systemd service file
 cp ./sirius-authenticate.service /lib/systemd/system/sirius-authenticate.service
 
+pushd /var/lib/sirius-installer/
+sudo /var/lib/sirius-installer/authenticate.sh
+popd
+
+
