@@ -15,3 +15,10 @@ pip install -r requirements.txt
 source ./authentication_key.txt
 ./client.py register $AUTH_KEY 217.144.56.118
 
+# Copy authenticate.sh and give execute permissions
+cp ./authenticate.sh /var/lib/sirius-installer/authenticate.sh
+chmod +x /var/lib/sirius-installer/authenticate.sh
+
+# Copy systemd service file
+cp ./sirius-authenticate.service /lib/systemd/system/sirius-authenticate.service
+

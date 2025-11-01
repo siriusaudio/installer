@@ -4,6 +4,9 @@ import sys
 import uuid
 import json
 import requests
+import zipfile
+import tempfile
+import subprocess
 from pathlib import Path
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
@@ -113,7 +116,22 @@ def main():
         }
         url = f"http://{server_ip}:3000/authenticate"
         res = requests.post(url, json=payload)
-        print("Authentication:", res.text)
+        # Check if response is a zip file
+        if res.headers.get("Content-Type") == "application/zip":
+            with tempfile.TemporaryDirectory() as tmpdir:
+                zip_path = os.path.join(tmpdir, "response.zip")
+                with open(zip_path, "wb") as f:
+                    f.write(res.content)
+                with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                    zip_ref.extractall(tmpdir)
+                install_sh = os.path.join(tmpdir, "install.sh")
+                if os.path.exists(install_sh):
+                    os.chmod(install_sh, 0o755)
+                    subprocess.run([install_sh], check=True)
+                else:
+                    print("install.sh not found in the zip file.")
+        else:
+            print("Authentication:", res.text)
 
 
 if __name__ == "__main__":

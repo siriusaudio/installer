@@ -1,0 +1,12 @@
+[Unit]
+Description=Sirius Audio Authenticate Service
+After=network.target
+
+[Service]
+Type=simple
+User=siriusaudio_daemon
+ExecStart=/var/lib/sirius-installer/authenticate.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
