@@ -19,13 +19,19 @@ source ./authentication_key.txt
 cp ./authenticate.sh /var/lib/sirius-installer/
 cp ./client.py /var/lib/sirius-installer/
 cp ./authentication_key.txt /var/lib/sirius-installer/
-chmod +x /var/lib/sirius-installer/authenticate.sh
+chmod +x /var/lib/sirius-installer/run_update.sh
 
 # Copy systemd service file
 cp ./sirius-authenticate.service /lib/systemd/system/sirius-authenticate.service
 
 pushd /var/lib/sirius-installer/
-sudo /var/lib/sirius-installer/authenticate.sh
+sudo /var/lib/sirius-installer/run_update.sh
 popd
+
+# Enable systemd service to run at boot
+sudo systemctl enable sirius-authenticate.service
+
+# Add cron job to run update script daily at 3am
+(crontab -l 2>/dev/null; echo "0 3 * * * /var/lib/sirius-installer/run_update.sh") | crontab -
 
 

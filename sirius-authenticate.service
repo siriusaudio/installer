@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=siriusaudio_daemon
 ExecStart=/var/lib/sirius-installer/authenticate.sh
-Restart=on-failure
+Restart=never
 
 [Install]
 WantedBy=multi-user.target
