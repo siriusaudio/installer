@@ -1,13 +1,15 @@
 #!/bin/bash
 
+sudo apt install python3-venv python3 whois -y
+
 sudo useradd -s /bin/bash siriusaudio_daemon
 PASSWORD=$(mkpasswd -m sha-512 siriusaudio)
 echo "siriusaudio_daemon:${PASSWORD}" | sudo chpasswd
 
 mkdir -p /var/lib/sirius-installer
 mkdir -p /var/lib/sirius-installer/.keys
-apt install python3-venv python3 whois -y
 
+chown -R siriusaudio_daemon /var/lib/sirius-installer
 python3 -m venv /var/lib/sirius-installer/.venv
 
 source /var/lib/sirius-installer/.venv/bin/activate
