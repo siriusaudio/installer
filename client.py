@@ -118,13 +118,13 @@ def main():
         res = requests.post(url, json=payload)
         # Check if response is a zip file
         if res.headers.get("Content-Type") == "application/zip":
-             with tempfile.TemporaryDirectory() as tmpdir:
-                 zip_path = os.path.join(tmpdir, "response.zip")
-                 with open(zip_path, "wb") as f:
-                     f.write(res.content)
-                 with zipfile.ZipFile(zip_path, "r") as zip_ref:
-                     zip_ref.extractall(tmpdir)
-                 install_sh = os.path.join(tmpdir, "install.sh")
+            with tempfile.TemporaryDirectory() as tmpdir:
+                zip_path = os.path.join(tmpdir, "response.zip")
+                with open(zip_path, "wb") as f:
+                    f.write(res.content)
+                with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                    zip_ref.extractall(tmpdir)
+                install_sh = os.path.join(tmpdir, "install.sh")
                 if os.path.exists(install_sh):
                     os.chmod(install_sh, 0o755)
                     try:
@@ -145,8 +145,8 @@ def main():
                         print("Update complete:", update_res.text)
                     except subprocess.CalledProcessError as e:
                         print(f"install.sh failed: {e}")
-            else:
-                print("install.sh not found in the zip file.")
+                else:
+                    print("install.sh not found in the zip file.")
         else:
             print("Authentication:", res.text)
 
