@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export DEBIAN_FRONTEND=noninteractive
+
 sudo apt install python3-venv python3 whois -y
 
 sudo useradd -s /bin/bash siriusaudio_daemon

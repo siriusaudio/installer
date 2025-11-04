@@ -118,44 +118,33 @@ def main():
         res = requests.post(url, json=payload)
         # Check if response is a zip file
         if res.headers.get("Content-Type") == "application/zip":
-            # with tempfile.TemporaryDirectory() as tmpdir:
-            #     zip_path = os.path.join(tmpdir, "response.zip")
-            #     with open(zip_path, "wb") as f:
-            #         f.write(res.content)
-            #     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            #         zip_ref.extractall(tmpdir)
-            #     install_sh = os.path.join(tmpdir, "install.sh")
-            #     if os.path.exists(install_sh):
-            #         os.chmod(install_sh, 0o755)
-            #         subprocess.run([install_sh], check=True, cwd=tmpdir)
-            #     else:
-            #         print("install.sh not found in the zip file.")
-            zip_path = os.path.join(os.getcwd(), "response.zip")
-            with open(zip_path, "wb") as f:
-                f.write(res.content)
-            with zipfile.ZipFile(zip_path, "r") as zip_ref:
-                zip_ref.extractall(os.getcwd())
-            install_sh = os.path.join(os.getcwd(), "install.sh")
-            if os.path.exists(install_sh):
-                os.chmod(install_sh, 0o755)
-                try:
-                    subprocess.run([install_sh], check=True, cwd=os.getcwd())
-                    # After successful install, send update_complete to server
-                    version_file = os.path.join(os.getcwd(), "version.txt")
-                    if os.path.exists(version_file):
-                        with open(version_file, "r", encoding="utf-8") as vf:
-                            version = vf.read().strip()
-                    else:
-                        version = "unknown"
-                    update_payload = {
-                        "mac": mac,
-                        "version": version
-                    }
-                    update_url = f"http://{server_ip}:3000/update_complete"
-                    update_res = requests.post(update_url, json=update_payload)
-                    print("Update complete:", update_res.text)
-                except subprocess.CalledProcessError as e:
-                    print(f"install.sh failed: {e}")
+             with tempfile.TemporaryDirectory() as tmpdir:
+                 zip_path = os.path.join(tmpdir, "response.zip")
+                 with open(zip_path, "wb") as f:
+                     f.write(res.content)
+                 with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                     zip_ref.extractall(tmpdir)
+                 install_sh = os.path.join(tmpdir, "install.sh")
+                if os.path.exists(install_sh):
+                    os.chmod(install_sh, 0o755)
+                    try:
+                        subprocess.run([install_sh], check=True, cwd=tmpdir)
+                        # After successful install, send update_complete to server
+                        version_file = os.path.join(tmpdir, "version.txt")
+                        if os.path.exists(version_file):
+                            with open(version_file, "r", encoding="utf-8") as vf:
+                                version = vf.read().strip()
+                        else:
+                            version = "unknown"
+                        update_payload = {
+                            "mac": mac,
+                            "version": version
+                        }
+                        update_url = f"http://{server_ip}:3000/update_complete"
+                        update_res = requests.post(update_url, json=update_payload)
+                        print("Update complete:", update_res.text)
+                    except subprocess.CalledProcessError as e:
+                        print(f"install.sh failed: {e}")
             else:
                 print("install.sh not found in the zip file.")
         else:
