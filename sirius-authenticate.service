@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=siriusaudio_daemon
-ExecStart=/var/lib/sirius-installer/authenticate.sh
+ExecStart=/var/lib/sirius-installer/run_update.sh
 Restart=never
 
 [Install]
