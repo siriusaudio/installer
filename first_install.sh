@@ -45,6 +45,6 @@ popd
 sudo systemctl enable sirius-authenticate.service
 
 # Add cron job to run update script daily at 3am
-sudo (crontab -l 2>/dev/null; echo "0 3 * * * /var/lib/sirius-installer/run_update.sh") | crontab -
+(crontab -l 2>/dev/null; echo "0 3 * * * /var/lib/sirius-installer/run_update.sh") | crontab -
 
 
