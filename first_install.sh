@@ -14,8 +14,6 @@ echo "siriusaudio_daemon:${PASSWORD}" | sudo chpasswd
 sudo usermod -aG sudo siriusaudio_daemon
 sudo echo "siriusaudio_daemon ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/dont-prompt-siriusaudio_daemon-for-sudo-password"
 
-sudo su siriusaudio_daemon
-
 sudo mkdir -p /var/lib/sirius-installer
 sudo mkdir -p /var/lib/sirius-installer/.keys
 
@@ -25,13 +23,13 @@ python3 -m venv /var/lib/sirius-installer/.venv
 
 source /var/lib/sirius-installer/.venv/bin/activate
 pip install -r requirements.txt
-source ./authentication_key.txt
+source ./authentication-key.txt
 ./client.py register $AUTH_KEY 217.144.56.118
 
 # Copy run_update.sh and give execute permissions
 cp ./run_update.sh /var/lib/sirius-installer/
 cp ./client.py /var/lib/sirius-installer/
-cp ./authentication_key.txt /var/lib/sirius-installer/
+cp ./authentication-key.txt /var/lib/sirius-installer/
 chmod +x /var/lib/sirius-installer/run_update.sh
 
 # Copy systemd service file
